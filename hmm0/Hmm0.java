@@ -24,7 +24,7 @@ public class Hmm0 {
 
 
         public void writeOutput(){
-            System.out.print("1 ");
+            System.out.print("1 "); //always 1 row in output
             System.out.print(calcedObsProbs.length + " ");
             for(double d : calcedObsProbs){
                 System.out.print(d + " ");
@@ -33,18 +33,22 @@ public class Hmm0 {
         }
 
         public void doTheThing(){
-            int numberofinits = initMatrix[0].length;
-            for(int rowIndex = 0; rowIndex < numberofinits; rowIndex++){
-                double initStateProb = initMatrix[0][rowIndex];
-                // System.out.println("init state probability: "  + initStateProb);
-                if(initStateProb != 0){
-                    for(int nextStateInd = 0; nextStateInd < stateMatrix[rowIndex].length; nextStateInd++){
-                        double nextStateProb = stateMatrix[rowIndex][nextStateInd];
-                        // System.out.println("next state probability: "  + nextStateProb);
 
-                        for(int obsIndex = 0; obsIndex < obsMatrix[rowIndex].length; obsIndex++){
-                            double obsValue = obsMatrix[nextStateInd][obsIndex];
-                            // System.out.println("obs value probability: "  + obsValue);
+            int numberofinits = initMatrix[0].length; //number of states
+
+            for(int rowIndex = 0; rowIndex < numberofinits; rowIndex++){
+
+                double initStateProb = initMatrix[0][rowIndex]; //the probability of starting at the current state
+
+                if(initStateProb != 0){ //if starting on state has probability 0, there is no reason to calculate it
+
+                    for(int nextStateInd = 0; nextStateInd < stateMatrix[rowIndex].length; nextStateInd++){ //iterate through state matrix
+
+                        double nextStateProb = stateMatrix[rowIndex][nextStateInd]; //the probability of transferring to a state from the current state
+
+                        for(int obsIndex = 0; obsIndex < obsMatrix[rowIndex].length; obsIndex++){ //iterate through the emission matrix
+
+                            double obsValue = obsMatrix[nextStateInd][obsIndex]; //probability of the obeservation given the state
                             calcedObsProbs[obsIndex] += obsValue * nextStateProb * initStateProb;
                         }
                     }
@@ -93,9 +97,5 @@ public class Hmm0 {
             } catch (IOException e){
 
             }
-            // System.out.println(Arrays.deepToString(stateMatrix));
-            // System.out.println(Arrays.deepToString(obsMatrix));
-            // System.out.println(Arrays.deepToString(initMatrix));
-
         }
 }
